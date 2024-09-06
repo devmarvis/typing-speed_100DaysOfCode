@@ -9,7 +9,7 @@ window = Tk()
 window.title("Typing Speed Test")
 window.config(width=600, height=400, padx=32, pady=32)
 
-TIME_LIMIT = 0.1
+TIME_LIMIT = 0.5
 TEXT_TO_TYPE = ("A text widget manages a multi-line text area. Like the canvas widget, Tk's text widget is an "
                 "immensely flexible and powerful tool that can be used for a wide variety of tasks.")
 wrapped_text = textwrap.fill(TEXT_TO_TYPE, width=50)
@@ -31,9 +31,12 @@ def countdown(count):
         print(text_entered)
         try:
             if text_entered[0]:
-                text_split_arr = text_entered.split(" ")
-                print(f'You typed {len(text_split_arr)} words in 6 seconds.')
-                canvas.itemconfig(notif_text, text=f'You typed {len(text_split_arr)} words in 6 seconds.', )
+                if text_entered != TEXT_TO_TYPE:
+                    text_split_arr = text_entered.split(" ")
+                    print(f'You typed {len(text_split_arr)} words in {int(TIME_LIMIT * 60)} seconds.')
+                    canvas.itemconfig(notif_text, text=f'You typed {len(text_split_arr)} words in {int(TIME_LIMIT * 60)} seconds.',)
+                else:
+                    canvas.itemconfig(notif_text, text=f'You typed all words in {int(TIME_LIMIT * 60)} seconds.')
         except IndexError:
             pass
 
