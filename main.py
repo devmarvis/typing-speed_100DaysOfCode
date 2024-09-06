@@ -10,18 +10,19 @@ window.title("Typing Speed Test")
 window.config(width=600, height=400, padx=32, pady=32)
 
 TIME_LIMIT = 0.5
+words_count = 0
 TEXT_TO_TYPE = ("A text widget manages a multi-line text area. Like the canvas widget, Tk's text widget is an "
                 "immensely flexible and powerful tool that can be used for a wide variety of tasks.")
 wrapped_text = textwrap.fill(TEXT_TO_TYPE, width=50)
 
 
 def countdown(count):
-    count_mins = math.floor(count / 60)
+    count_min = math.floor(count / 60)
     count_secs = int(count % 60)
 
     if count_secs < 10:
         count_secs = f"0{count_secs}"
-    canvas.itemconfig(timer_text, text=f"{count_mins}:{count_secs}")
+    canvas.itemconfig(timer_text, text=f"{count_min}:{count_secs}")
 
     if count > 0:
         window.after(1000, countdown, count - 1)
@@ -33,8 +34,13 @@ def countdown(count):
             if text_entered[0]:
                 if text_entered != TEXT_TO_TYPE:
                     text_split_arr = text_entered.split(" ")
-                    print(f'You typed {len(text_split_arr)} words in {int(TIME_LIMIT * 60)} seconds.')
-                    canvas.itemconfig(notif_text, text=f'You typed {len(text_split_arr)} words in {int(TIME_LIMIT * 60)} seconds.',)
+                    text_to_type_arr = TEXT_TO_TYPE.split(" ")
+                    global words_count
+                    for i in range(0, len(text_split_arr)):
+                        if text_split_arr[i] == text_to_type_arr[i]:
+                            print('True')
+                            words_count += 1
+                    canvas.itemconfig(notif_text, text=f'You typed {words_count} correct words in {int(TIME_LIMIT * 60)} seconds.',)
                 else:
                     canvas.itemconfig(notif_text, text=f'You typed all words in {int(TIME_LIMIT * 60)} seconds.')
         except IndexError:
